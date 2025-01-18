@@ -1,0 +1,11 @@
+fastapi==0.100.0
+uvicorn==0.23.2
+sqlalchemy==2.0.20
+pydantic==1.10.12
+python-multipart==0.0.6
+bcrypt==4.0.1
+pyjwt==2.8.0
+langchain==0.0.300
+openai==0.27.10
+pdfminer.six==20221105
+pymysql==1.1.1
