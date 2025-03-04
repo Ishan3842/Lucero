@@ -54,7 +54,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",  # Local development
+        "https://your-frontend-url.vercel.app",  # Production frontend
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -148,13 +151,13 @@ def decode_jwt(token: str):
         return None
 
 
-@app.get("/chat/sessions")
-def get_sessions(token: str):
-    decoded = decode_jwt(token)
-    if not decoded:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    # Hardcoded sessions
-    return [{"id": 1, "title": "Session One"}, {"id": 2, "title": "Session Two"}]
+# @app.get("/chat/sessions")
+# def get_sessions(token: str):
+#     decoded = decode_jwt(token)
+#     if not decoded:
+#         raise HTTPException(status_code=401, detail="Invalid token")
+#     # Hardcoded sessions
+#     return [{"id": 1, "title": "Session One"}, {"id": 2, "title": "Session Two"}]
 
 
 @app.post("/chat")
@@ -181,6 +184,17 @@ def chat_endpoint(req: ChatRequest, token: Optional[str] = None):
     if there is a pdf, explain it in points which is easy to understand.
     Once you have split it up into points, give the answer in a good format. 
     Don't put the points in a paragraph, instead put them in a list.
+    You respond to health-related questions with empathy and helpfulness.
+    
+    If the user asks a question for example - "what vaccines do I need?" and if you don't have the previous chat history,
+    as to why the user is asking then you can ask follow-up questions to understand what is the issue and then provide the answer.
+    
+    Example 1:
+    User: "I have a headache. What do I do?"
+    
+    If a user asks a question like this, always try to understand the issue first.
+    Ask follow-up questions to understand the issue better. Act like a professional doctor but when it gets too deep, 
+    advise them to seek professional help.
 
     Follow these rules:
         1. If the user's query sounds like it requires urgent care, advise them to seek professional help. Still give your best advice.
@@ -228,4 +242,8 @@ def pdf_qa_endpoint(req: PDFQARequest, token: Optional[str] = None):
 
 @app.get("/")
 def root():
-    return {"message": "Backend up"}
+    return {
+        "message": "Backend up",
+        "status": "success",
+        "Docs": "http://localhost:8000/docs",
+    }
